@@ -54,7 +54,7 @@ public sealed class PostgresClusterService : IClusterService
                    (SELECT COUNT(*) FROM cluster_mgmt.nodes n WHERE n.cluster_id = c.cluster_id) AS node_count,
                    c.status, c.registered_at
             FROM cluster_mgmt.clusters c
-            JOIN core.sites s ON s.site_id = c.site_id
+            LEFT JOIN core.sites s ON s.site_id = c.site_id
             WHERE c.org_id = $1
             ORDER BY c.name
             """);
@@ -67,7 +67,7 @@ public sealed class PostgresClusterService : IClusterService
                 reader.GetGuid(0),
                 reader.GetGuid(1),
                 reader.GetString(2),
-                reader.GetString(3),
+                reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
                 (int)reader.GetInt64(4),
                 Enum.Parse<ClusterStatus>(reader.GetString(5), ignoreCase: true),
                 reader.GetFieldValue<DateTimeOffset>(6)));
