@@ -21,6 +21,8 @@ jobs:
     with:
       package-id: 'CloudSmith.Modules.ClusterManagement'
       pre-release: true
+      # CI validates packing only; publish to GHPR happens on tag via publish.yml.
+      push: false
     secrets: inherit
   openapi:
     if: github.ref == 'refs/heads/main'
