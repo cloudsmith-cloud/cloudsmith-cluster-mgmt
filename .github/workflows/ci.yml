@@ -24,10 +24,12 @@ jobs:
       # CI validates packing only; publish to GHPR happens on tag via publish.yml.
       push: false
     secrets: inherit
-  openapi:
-    if: github.ref == 'refs/heads/main'
-    needs: [build-test]
-    uses: cloudsmith-cloud/cloudsmith-workflows/.github/workflows/openapi-publish.yml@v1.0.0
-    with:
-      module-name: 'cloudsmith-cluster-mgmt'
-    secrets: inherit
+  # openapi generation requires a runnable project that outputs spec — not yet wired.
+  # Disabled until the OpenAPI generation entrypoint is implemented.
+  # openapi:
+  #   if: github.ref == 'refs/heads/main'
+  #   needs: [build-test]
+  #   uses: cloudsmith-cloud/cloudsmith-workflows/.github/workflows/openapi-publish.yml@v1.0.0
+  #   with:
+  #     module-name: 'cloudsmith-cluster-mgmt'
+  #   secrets: inherit
