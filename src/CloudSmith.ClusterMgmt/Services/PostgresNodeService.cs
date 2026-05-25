@@ -97,6 +97,28 @@ public sealed class PostgresNodeService : INodeService
         await cmd.ExecuteNonQueryAsync(ct);
     }
 
+    public async Task DrainNodeAsync(Guid nodeId, Guid orgId, CancellationToken ct = default)
+    {
+        await using var cmd = _db.CreateCommand("""
+            UPDATE cluster_mgmt.nodes SET status = 'draining' WHERE node_id = $1 AND org_id = $2
+            """);
+        cmd.Parameters.AddWithValue(nodeId);
+        cmd.Parameters.AddWithValue(orgId);
+        await cmd.ExecuteNonQueryAsync(ct);
+    }
+
+    public async Task SetMaintenanceModeAsync(Guid nodeId, Guid orgId, bool enable, CancellationToken ct = default)
+    {
+        var status = enable ? "maintenance" : "online";
+        await using var cmd = _db.CreateCommand("""
+            UPDATE cluster_mgmt.nodes SET status = $3 WHERE node_id = $1 AND org_id = $2
+            """);
+        cmd.Parameters.AddWithValue(nodeId);
+        cmd.Parameters.AddWithValue(orgId);
+        cmd.Parameters.AddWithValue(status);
+        await cmd.ExecuteNonQueryAsync(ct);
+    }
+
     public async Task DeregisterAsync(Guid nodeId, Guid orgId, CancellationToken ct = default)
     {
         await using var cmd = _db.CreateCommand("""

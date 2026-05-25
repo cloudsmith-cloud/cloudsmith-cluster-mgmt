@@ -12,5 +12,7 @@ public interface INodeService
     Task<IReadOnlyList<NodeSummary>> ListNodesAsync(Guid clusterId, Guid orgId, CancellationToken ct = default);
     Task UpdateStatusAsync(Guid nodeId, Guid orgId, NodeStatus status, CancellationToken ct = default);
     Task RecordHeartbeatAsync(Guid nodeId, Guid orgId, CancellationToken ct = default);
+    Task DrainNodeAsync(Guid nodeId, Guid orgId, CancellationToken ct = default);
+    Task SetMaintenanceModeAsync(Guid nodeId, Guid orgId, bool enable, CancellationToken ct = default);
     Task DeregisterAsync(Guid nodeId, Guid orgId, CancellationToken ct = default);
 }
