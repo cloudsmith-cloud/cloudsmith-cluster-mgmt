@@ -101,7 +101,7 @@ public sealed class PostgresClusterService : IClusterService
     private static ClusterDetail MapDetail(NpgsqlDataReader r) => new(
         r.GetGuid(0),
         r.GetGuid(1),
-        r.GetGuid(2),
+        r.IsDBNull(2) ? Guid.Empty : r.GetGuid(2),
         r.GetString(3),
         r.IsDBNull(4) ? null : r.GetString(4),
         r.IsDBNull(5) ? null : r.GetString(5),
